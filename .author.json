@@ -1,1 +1,5 @@
-
+~/codeflix/onecode/myExpress ❯❯❯ cat -e .author.json
+{
+  "firstname": "Réda"
+  "lastname": "ALAKHEIR"
+}$
