@@ -12,17 +12,41 @@ const typeDefs = gql`
     author: String
   }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
-  type Query {
-    books: [Book]
+  type User {
+    id: Int
+    email: String
+    password: String
+    firstName: String
+    lastName: String
   }
+
+  type Post {
+    id: Int
+    author: [User]
+    comments: [Post]
+    content: String
+    createdAt: String
+    updatedAt: String
+  }
+
+
+  ##############
+  type Query {
+    books: [Book],
+    users: [User],
+    posts: [Post]
+  }
+
+
+  type Mutation {
+    addUser(id: Int, email: String, password: String, firstName: String, lastName: String): User
+  }
+
 `;
 
- books = [
+  const books = [
     {
-      title: 'The Awakening',
+      id: 'The Awakening',
       author: 'Kate Chopin',
     },
     {
@@ -31,12 +55,61 @@ const typeDefs = gql`
     },
   ];
 
+  const users = [
+    {
+      id: 001,
+      email: 'mail@test.com',
+      password: 'password',
+      firstName: 'firstname',
+      lastName: 'lastname'
+    },
+    {
+      id: 002,
+      email: 'mail1@test.com',
+      password: 'password1',
+      firstName: 'firstname1',
+      lastName: 'lastname1'
+    }
+  ];
+
+  const posts = [
+    {
+      id: 001,
+      author: users[0],
+      comments: [
+        {
+        id: 002,
+        author: users[1],
+        comments: null,
+        content: 'string',
+        createdAt: 'Date',
+        updatedAt: 'Date',
+        }
+      ],
+      content: 'string',
+      createdAt: 'Date',
+      updatedAt: 'Date',
+    },
+  ];
+
+
+
+
   const resolvers = {
     Query: {
       books: () => books,
+      users: () => users,
+      posts: () => posts
     },
+
+    Mutation:{
+      addUser: (parent,variables) =>
+        {
+          return variables
+        }
+    }
+
   };
-  
   
   
 // The ApolloServer constructor requires two parameters: your schema
